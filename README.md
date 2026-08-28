@@ -32,6 +32,8 @@ Se non li hai ancora, i percorsi **a costo zero**:
 | **SPID con PosteID** | App PosteID → registrazione con riconoscimento via CIE o passaporto elettronico | 1 giorno |
 | **SPID con Lepida ID** | Registrazione con CIE/CNS/firma digitale | 1–2 giorni |
 
+Oppure scegli fra uno di questi [provider accreditati](https://www.spid.gov.it/cosa-e-spid/come-attivare-spid/) (elenco ufficiale AgID su spid.gov.it).
+
 ⚠️ Il video-riconoscimento è quasi sempre a pagamento: se hai la CIE, usala per il riconoscimento e non paghi nulla.
 
 ### 🔑 Credenziali Fisconline (PIN + password telematica)
