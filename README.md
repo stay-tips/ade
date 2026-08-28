@@ -199,3 +199,9 @@ Sì, via emulazione Rosetta (`platform: linux/amd64`). L'avvio dell'app è più 
 ## Licenza
 
 Questo repo (infrastruttura e script): MIT, vedi [LICENSE](LICENSE). **Desktop Telematico è software dell'Agenzia delle Entrate**, soggetto alle sue condizioni: il repo non lo contiene — l'immagine pubblicata lo incorpora prelevandolo dal server di distribuzione pubblico AdE in fase di build. Nel repo non viaggiano credenziali né dati fiscali (`data/` e `f24/` sono in `.gitignore`).
+
+---
+
+<p align="center">
+  Brought to you with ❤️ by <a href="https://stay.tips"><b>stay.tips</b></a> — <i>the PMS from the future</i>
+</p>
