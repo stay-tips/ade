@@ -78,14 +78,63 @@ Per aggiornare quando esce una nuova immagine: `docker compose pull && docker co
 
 💡 Su Mac le scorciatoie usano **Ctrl+Option**: Option da solo genera caratteri speciali e non arriva al desktop remoto.
 
+### Le cartelle che usi ogni giorno
+
+```
+ade/desktop-telematico/               ← sul tuo computer      nel container
+│
+├── docker-compose.yml                   avvio/stop
+│
+├── f24/                              ◄─────────────────────►  /config/f24
+│   ├── F24_2026-09.f24                  tracciato da inviare (lo metti tu)
+│   ├── F24_2026-09.f24.dgn              esito del controllo (lo crea DT)
+│   ├── F24_2026-09.ccf                  file autenticato     (lo crea DT)
+│   └── ricevuta_prot_1234.pdf           ricevuta scaricata   (la salvi qui)
+│
+└── data/                             ◄─────────────────────►  /config
+    ├── .Xresources                      DPI dello schermo (Xft.dpi: 168)
+    └── .config/i3/config                scorciatoie e autostart
+
+volume Docker "dt-app"                ◄─────────────────────►  /opt/DT
+    (non è una cartella visibile)        app, utenza locale, database
+```
+
+Regola pratica: **tutto ciò che entra ed esce passa da `f24/`** — il tracciato ce lo metti tu, controlli ed esiti li trovi lì, la ricevuta la salvi lì.
+
 ---
 
 ## 4. Inviare un F24: il flusso completo
 
 ```
- PIN Fisconline      File F24         Modulo di        File Internet      Ricevuta
- (una volta)    ─►   pronto      ─►   controllo   ─►   autentica     ─►   in area
-                     in /config/f24   (0 errori)       e invia            riservata
+                      SUL TUO COMPUTER                NEL DESKTOP REMOTO (container)
+                                                              (Desktop Telematico)
+ ┌──────────────────┐
+ │ gestionale /     │
+ │ software di      │
+ │ compilazione     │
+ └────────┬─────────┘
+          │  produce il tracciato
+          ▼
+ ┌──────────────────┐    visibile come     ┌─────────────────────────────┐
+ │  f24/mio.f24     │ ───────────────────► │ 1. Documenti → Controlla    │
+ └──────────────────┘   /config/f24        │    esito: 0 errori (.dgn)   │
+                                           └──────────────┬──────────────┘
+                                                          ▼
+                                           ┌─────────────────────────────┐
+                              PIN e        │ 2. Documenti → Autentica    │
+                              password ──► │    produce il file .ccf     │
+                              telematica   └──────────────┬──────────────┘
+                                                          ▼
+                                           ┌─────────────────────────────┐
+                                           │ 3. Documenti → Invia        │
+                                           │    ⚠️ da qui il versamento  │
+                                           │    è reale → protocollo     │
+                                           └──────────────┬──────────────┘
+                                                          ▼
+ ┌──────────────────┐    la salvi in       ┌─────────────────────────────┐
+ │ f24/ricevuta.pdf │ ◄─────────────────── │ 4. Ricevute (entro qualche  │
+ └──────────────────┘   /config/f24        │    ora, anche in area AdE)  │
+                                           └─────────────────────────────┘
 ```
 
 1. **Configura File Internet** (prima volta): dentro Desktop Telematico installa l'applicazione **File Internet** e il **modulo di controllo F24** (menu delle applicazioni), poi inserisci nelle impostazioni codice fiscale, PIN e password telematica
