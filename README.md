@@ -42,29 +42,25 @@ Sono **diverse** da SPID: servono a Desktop Telematico per autenticare i file da
 3. Visualizza (o genera) il **codice PIN** e imposta la **password telematica**
 4. Conservali: li userai dentro Desktop Telematico
 
-### 📦 Il pacchetto Desktop Telematico per Linux
-Dall'area riservata: **Servizi → Desktop telematico → Scarica l'applicazione**, versione **Linux 64 bit** (`DesktopTelematico-linux64_*.zip`). Non è incluso in questo repo: è software AdE e ognuno lo scarica dal proprio account.
-
 ---
 
 ## 2. Installazione (una volta sola)
 
 ```bash
-git clone git@github.com:stay-tips/ade.git
+git clone https://github.com/stay-tips/ade.git
 cd ade/desktop-telematico
-docker compose up -d --build        # la prima build richiede qualche minuto
+docker compose up -d
 ```
+
+Tutto qui: viene scaricata l'**immagine già pronta** da Docker Hub ([`enrico508/desktop-telematico`](https://hub.docker.com/r/enrico508/desktop-telematico)), con Desktop Telematico incorporato. Nessuna build, nessun download di software AdE da parte tua.
 
 Poi:
 
-1. Copia lo zip scaricato dall'AdE nella cartella `desktop-telematico/data/`
-2. Apri **http://localhost:3000** con **Chrome** (su macOS evita Safari: lo streaming del desktop non funziona bene)
-3. Nel desktop remoto apri un terminale con **Ctrl+Alt+Invio** e scompatta l'app:
-   ```bash
-   cd /config && mkdir -p DT && unzip DesktopTelematico-linux64_*.zip -d DT
-   ```
-4. Riavvia il container: `docker compose restart` — al riavvio l'app viene preparata e **si avvia da sola**
-5. Nella finestra di Login clicca **"Nuovo utente"** e crea l'utenza locale (nome e password a piacere: proteggono solo i dati nel container, non c'entrano con Fisconline)
+1. Apri **http://localhost:3000** con **Chrome** (su macOS evita Safari: lo streaming del desktop non funziona bene)
+2. Desktop Telematico compare da solo entro un minuto
+3. Alla prima apertura clicca **"Nuovo utente"** e crea l'utenza locale (nome e password a piacere: proteggono solo i dati nel container, non c'entrano con Fisconline)
+
+Per aggiornare quando esce una nuova immagine: `docker compose pull && docker compose up -d`. (Per i manutentori: `docker-compose.build.yml` ricostruisce l'immagine da zero, anche con un nuovo pacchetto AdE via `--build-arg ADE_DT_URL=...`.)
 
 ---
 
@@ -100,6 +96,21 @@ Poi:
 
 ⚠️ **L'invio è un versamento vero**: l'importo viene addebitato sull'IBAN indicato nel file alla data di scadenza. Ricontrolla importi e coordinate prima del passo 4.
 
+### Dove va messo il tracciato e come si invia
+
+Il **tracciato** è il file telematico dell'F24 (formato definito dalle [specifiche tecniche AdE](https://www.agenziaentrate.gov.it/portale/web/guest/schede/pagamenti/f24/software-f24)), generato dal tuo gestionale o dal software di compilazione.
+
+1. **Mettilo nella cartella `f24/`** accanto al `docker-compose.yml`: dentro il desktop remoto lo trovi in **`/config/f24`**
+2. In Desktop Telematico: **Documenti → Controlla** → sfoglia fino a `/config/f24`, seleziona il file e come tipo documento scegli F24 → il controllo deve chiudersi con **0 errori** (l'esito, file `.dgn`, resta accanto al tracciato)
+3. **Documenti → Autentica**: seleziona il file controllato; ti verranno chieste le credenziali dei servizi telematici (PIN e password). Viene prodotto il file autenticato `.ccf`
+4. **Documenti → Invia** (o dal sito, area riservata → Servizi → Invio, caricando il `.ccf`): annota il **protocollo di trasmissione**
+5. La **ricevuta** arriva in area riservata → Ricevute (o Documenti → Ricevute in Desktop Telematico): scaricala in `/config/f24` così te la ritrovi in `f24/` sul tuo computer
+
+Documentazione ufficiale:
+- [Pagina del servizio Desktop Telematico](https://www.agenziaentrate.gov.it/portale/servizi/servizitrasversali/altri/desktoptelematico) (Agenzia delle Entrate)
+- [Manuale di installazione e gestione](https://telematici.agenziaentrate.gov.it/pdf/Manuale_di_installazione_Desktop_Telematico.pdf) (PDF AdE)
+- [Assistenza: gestire il Desktop Telematico](https://assistenza.agenziaentrate.gov.it/portale/gestire-il-desktop-telematico) — installazione applicazioni, controllo, autenticazione, invio e ricevute
+
 ### Procedura guidata
 Per il primo invio c'è un wizard interattivo che ti accompagna passo-passo (apre le pagine giuste, aspetta le tue conferme, annota il protocollo):
 
@@ -124,7 +135,7 @@ Modifica `data/.Xresources` (default `Xft.dpi: 168`; prova 144 o 192) e poi `doc
 La prima volta non esiste nessun utente: clicca **Nuovo utente** e crealo tu. Sono credenziali locali del container.
 
 **Ho ricreato il container: ho perso qualcosa?**
-No, se `data/` è intatta: contiene utenza, app e configurazione. Al riavvio tutto viene ripristinato automaticamente.
+No: l'app e i suoi dati (utenza, database, ambiente di sicurezza) vivono nel volume Docker `dt-app`, la configurazione del desktop in `data/`. Si perde tutto solo cancellando esplicitamente il volume (`docker volume rm`).
 
 **Posso pagare l'F24 in un altro modo?**
 Sì: F24 Web nell'area riservata AdE (compilazione online, addebito su IBAN) o l'home banking, se la tua banca supporta l'F24. Questo container serve quando vuoi il flusso "da tracciato" completo o hai più deleghe da gestire.
@@ -136,4 +147,4 @@ Sì, via emulazione Rosetta (`platform: linux/amd64`). L'avvio dell'app è più 
 
 ## Licenza
 
-Questo repo (infrastruttura e script): MIT, vedi [LICENSE](LICENSE). **Desktop Telematico è software dell'Agenzia delle Entrate**, soggetto alle sue condizioni: non è incluso né ridistribuito. Nel repo non viaggiano credenziali né dati fiscali (`data/` e `f24/` sono in `.gitignore`).
+Questo repo (infrastruttura e script): MIT, vedi [LICENSE](LICENSE). **Desktop Telematico è software dell'Agenzia delle Entrate**, soggetto alle sue condizioni: il repo non lo contiene — l'immagine pubblicata lo incorpora prelevandolo dal server di distribuzione pubblico AdE in fase di build. Nel repo non viaggiano credenziali né dati fiscali (`data/` e `f24/` sono in `.gitignore`).

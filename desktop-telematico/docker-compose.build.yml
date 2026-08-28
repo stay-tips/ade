@@ -1,0 +1,13 @@
+# Solo per i manutentori: costruisce e tagga l'immagine da pubblicare su GHCR.
+#
+#   docker compose -f docker-compose.build.yml build
+#   docker push ghcr.io/stay-tips/desktop-telematico:latest
+#
+# Per una nuova versione del pacchetto AdE:
+#   docker compose -f docker-compose.build.yml build --build-arg ADE_DT_URL=<url zip>
+services:
+  desktop-telematico:
+    extends:
+      file: docker-compose.yml
+      service: desktop-telematico
+    build: .

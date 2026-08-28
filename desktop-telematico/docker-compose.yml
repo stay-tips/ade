@@ -1,6 +1,6 @@
 services:
   desktop-telematico:
-    build: .
+    image: enrico508/desktop-telematico:latest
     platform: linux/amd64
     container_name: desktop-telematico
     ports:
@@ -13,9 +13,15 @@ services:
       # i3 è un WM non-reparenting: senza questa le app Java mostrano finestre grigie
       - _JAVA_AWT_WM_NONREPARENTING=1
     volumes:
-      # home persistente del desktop: mettere qui il pacchetto DesktopTelematico-linux64_*.zip
+      # app + dati (utenza locale, database, ambiente di sicurezza):
+      # volume Docker nominato, sopravvive a update e ricreazioni
+      - dt-app:/opt/DT
+      # home del desktop (config i3, DPI, ecc.)
       - ./data:/config
-      # cartella di scambio per tracciati F24 e ricevute
+      # cartella di scambio col computer: tracciati F24 in entrata, ricevute in uscita
       - ./f24:/config/f24
     shm_size: "1gb"
     restart: unless-stopped
+
+volumes:
+  dt-app:
