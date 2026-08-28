@@ -52,7 +52,7 @@ cd ade/desktop-telematico
 docker compose up -d
 ```
 
-Tutto qui: viene scaricata l'**immagine già pronta** da Docker Hub ([`enrico508/desktop-telematico`](https://hub.docker.com/r/enrico508/desktop-telematico)), con Desktop Telematico incorporato. Nessuna build, nessun download di software AdE da parte tua.
+Tutto qui: viene scaricata l'**immagine già pronta** da Docker Hub, con Desktop Telematico incorporato. Nessuna build, nessun download di software AdE da parte tua.
 
 Poi:
 
