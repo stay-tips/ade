@@ -1,0 +1,21 @@
+services:
+  desktop-telematico:
+    build: .
+    platform: linux/amd64
+    container_name: desktop-telematico
+    ports:
+      - "3000:3000"
+    environment:
+      - TZ=Europe/Rome
+      - PUID=1000
+      - PGID=1000
+      - TITLE=Desktop Telematico
+      # i3 è un WM non-reparenting: senza questa le app Java mostrano finestre grigie
+      - _JAVA_AWT_WM_NONREPARENTING=1
+    volumes:
+      # home persistente del desktop: mettere qui il pacchetto DesktopTelematico-linux64_*.zip
+      - ./data:/config
+      # cartella di scambio per tracciati F24 e ricevute
+      - ./f24:/config/f24
+    shm_size: "1gb"
+    restart: unless-stopped
