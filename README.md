@@ -1,4 +1,4 @@
-# Desktop Telematico in Docker — Guida utente
+# Desktop Telematico chiavi in mano
 
 Usa **Desktop Telematico** dell'Agenzia delle Entrate (controllo, autenticazione e invio di F24 e dichiarazioni) **dal browser**, senza installare nulla sul tuo computer: l'applicazione gira in un container Docker e tu la vedi su una pagina web.
 
