@@ -203,5 +203,5 @@ Questo repo (infrastruttura e script): MIT, vedi [LICENSE](LICENSE). **Desktop T
 ---
 
 <p align="center">
-  Brought to you with ❤️ by <a href="https://stay.tips"><b>stay.tips</b></a> — <i>the PMS from the future</i>
+  Brought to you with ❤️ by the team behind <a href="https://stay.tips"><b>stay.tips</b></a> — <i>the PMS from the future</i>
 </p>
